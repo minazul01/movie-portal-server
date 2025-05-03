@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const express = require('express')
 const app = express()
 const cors = require('cors')
@@ -34,16 +34,25 @@ async function run() {
 
     const movieCollection = client.db("movie-feature").collection("feature");
 
-    // movie features to postman creation
+    // all movie add to postman creation 12 data
   app.post('/features', async (req, res) => {
       const data = req.body;
       const result = await movieCollection.insertOne(data);
       res.send(result);
   })
-  // movie features data client site show
+  // all movie data client site show
   app.get('/features', async (req, res) => {
     const result = await movieCollection.find().toArray();
     res.send(result);
+  })
+
+  // all movie delete add
+  app.delete('/features/:id', async (req, res) => {
+    const id = req.params.id;
+    const query = {_id: new ObjectId(id)};
+    const result = await movieCollection.deleteOne(query);
+    res.send(result);
+    
   })
 
 

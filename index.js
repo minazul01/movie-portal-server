@@ -33,6 +33,7 @@ async function run() {
     await client.connect();
 
     const movieCollection = client.db("movie-feature").collection("feature");
+    const favouriteCollection = client.db("movie-feature").collection("favourites");
 
     // all movie add to postman creation 12 data
   app.post('/features', async (req, res) => {
@@ -51,6 +52,27 @@ async function run() {
     const id = req.params.id;
     const query = {_id: new ObjectId(id)};
     const result = await movieCollection.deleteOne(query);
+    res.send(result);
+    
+  })
+
+  // favourite added movie
+  app.post('/favourites', async(req, res) => {
+       const data = req.body;
+       const result = await favouriteCollection.insertOne(data);
+       res.send(result);
+  })
+  // favourite movie show favourite pages
+  app.get('/favourites', async(req, res) => {
+    const result = await favouriteCollection.find().toArray();
+    res.send(result);
+  })
+
+  // favourite movie delete
+  app.delete('/favourites/:id', async (req, res) => {
+    const id = req.params.id;
+    const query = {_id: new ObjectId(id)};
+    const result = await favouriteCollection.deleteOne(query);
     res.send(result);
     
   })

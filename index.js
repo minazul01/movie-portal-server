@@ -54,7 +54,18 @@ async function run() {
     const result = await movieCollection.deleteOne(query);
     res.send(result);
     
+  });
+
+  // update movie
+
+  app.get("/features/:id", async(req, res) => {
+     const id = req.params.id;
+    const query = {_id: new ObjectId(id)};
+    const result = await movieCollection.findOne(query);
+    res.send(result);
   })
+
+
 
   // favourite added movie
   app.post('/favourites', async(req, res) => {

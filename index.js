@@ -64,6 +64,27 @@ async function run() {
     const result = await movieCollection.findOne(query);
     res.send(result);
   })
+  
+  // put methode apply
+  app.patch("/features/:id", async (req, res) => {
+    const id = req.params.id;
+    const quire = req.body;
+    const filter = {_id: new ObjectId(id)};
+    // const option = { upsert : false}
+    const updateDocs = {
+      $set: {
+        title: quire?.title,
+        genre: quire?.genre,
+        duration: quire.duration,
+        releaseYear: quire.releaseYear,
+        rating: quire.rating,
+        poster: quire.poster,
+        description: quire.description
+      }
+    };
+    const result = await movieCollection.updateOne(filter, updateDocs);
+    res.send(result);
+  })
 
 
 

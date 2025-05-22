@@ -1,7 +1,8 @@
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const express = require('express')
 const app = express()
-const cors = require('cors')
+const cors = require('cors');
+const { title } = require('process');
 require('dotenv').config()
 const port = process.env.PORT || 8000;
 
@@ -43,7 +44,13 @@ async function run() {
   })
   // all movie data client site show
   app.get('/features', async (req, res) => {
-    const result = await movieCollection.find().toArray();
+    const {searchParams} = req.query;
+    let option = {};
+    if(searchParams){
+      option = {title: {$regex: searchParams, $options: 'i'}};
+    }
+   
+    const result = await movieCollection.find(option).toArray();
     res.send(result);
   })
 
